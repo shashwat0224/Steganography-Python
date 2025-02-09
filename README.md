@@ -39,5 +39,5 @@ pip install customtkinter opencv-python numpy pillow
 Feel free to fork the project, create a new branch, and submit a pull request!
 
 ### License 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
 
