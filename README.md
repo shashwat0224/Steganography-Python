@@ -1,21 +1,21 @@
-## Steganography Tool 🖼️🔐
+## Steganography Tool 
 
 A Python-based steganography tool that allows users to hide text or images within images. This project provides a user-friendly interface using `customtkinter` and utilizes `PIL` and `OpenCV` for encoding and decoding hidden data.
 
-### Features ✨
+### Features 
 - **Text in Image:** Hide secret text inside an image and extract it when needed.
 - **Image in Image:** Conceal an entire image within another image and retrieve it later.
 - **User-Friendly GUI:** Built with `customtkinter` for an intuitive experience.
 - **Image Processing:** Uses `OpenCV` and `PIL` for efficient encoding and decoding.
 - **Supports PNG, JPEG, JPG Formats.**
 
-### Installation 🛠️
+### Installation 
 Ensure you have Python installed. Then, install the required dependencies:
 ```sh
 pip install customtkinter opencv-python numpy pillow
 ```
 
-### Usage 🚀
+### Usage 
 1. Run the script:
    ```sh
    python main.py
@@ -25,19 +25,19 @@ pip install customtkinter opencv-python numpy pillow
 4. Save the steganographed image.
 5. Decode whenever required.
 
-### Dependencies 📦
+### Dependencies 
 - `Python 3.x`
 - `customtkinter`
 - `opencv-python`
 - `numpy`
 - `pillow`
 
-### Screenshots 📸
+### Screenshots 
 *Will be uploaded soon...*
 
-### Contributing 🤝
+### Contributing 
 Feel free to fork the project, create a new branch, and submit a pull request!
 
-### License 📚
+### License 
 This project is licensed under the MIT License.
 
