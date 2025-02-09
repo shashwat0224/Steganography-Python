@@ -21,10 +21,11 @@ class Steganography:
         width = root.winfo_reqwidth()
         height = root.winfo_reqheight()
         root.geometry(f"{width}x{height}")
+        root.eval('tk::PlaceWindow . center')
 
     def main(self,root):
         root.title("Steganography")
-        root.geometry("800x600")
+        root.geometry("100x100")
         root.configure(bg="#f0f0f0" )
         root.grid_rowconfigure(1, weight=1)
         root.grid_columnconfigure(0, weight=1)
@@ -157,7 +158,7 @@ class Steganography:
         self.update_window_size()
 
     def decode_frame2_img(self,frame):
-        dec_frame2 = ctk.CTkScrollableFrame(root, width= 350, height= 450, fg_color="white", orientation="vertical")
+        dec_frame2 = ctk.CTkScrollableFrame(root, width= 350, height= 350, fg_color="white", orientation="vertical")
         dec_frame2.pack(padx=15, pady=15, fill="both", expand=True)
         dec_frame2.pack_propagate(True)
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
@@ -195,7 +196,7 @@ class Steganography:
         self.update_window_size()
         
     def encode_frame2_txt(self,frame):
-        enc_frame2 = ctk.CTkFrame(root, fg_color="white")
+        enc_frame2 = ctk.CTkScrollableFrame(root, width=350, height=400, fg_color="white", orientation="vertical")
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile:
             messagebox.showerror("Error", "No file selected")
@@ -214,10 +215,9 @@ class Steganography:
             image_label.pack()
             text_label = ctk.CTkLabel(enc_frame2, text="Enter text to hide", font=("Arial", 16))
             text_label.pack()
-            text_area = ctk.CTkTextbox(enc_frame2, font=("Arial", 16), width=50, height=5)
+            text_area = ctk.CTkTextbox(enc_frame2, font=("Arial", 16), width=250, height=75, border_color="grey", border_width=1)
             text_area.pack()
-            data = text_area.get("1.0", "END")
-            encode_button = ctk.CTkButton(enc_frame2, text="Encode", font=("Arial", 16), command=lambda: self.encode_txt(myfile, data, text_area, enc_frame2))
+            encode_button = ctk.CTkButton(enc_frame2, text="Encode", font=("Arial", 16), command=lambda: self.encode_txt(myfile, text_area, enc_frame2))
             encode_button.pack()
             main_menu_button = ctk.CTkButton(enc_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame2))
             main_menu_button.pack()
@@ -237,7 +237,7 @@ class Steganography:
         self.update_window_size()
 
     def decode_frame2_txt(self,frame):
-        dec_frame2 = ctk.CTkFrame(root, fg_color="white")
+        dec_frame2 = ctk.CTkScrollableFrame(root,width=350, height=400, fg_color="white", orientation="vertical")
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile:
             messagebox.showerror("Error", "No file selected")
@@ -256,8 +256,8 @@ class Steganography:
             image_label.pack()
             text_label = ctk.CTkLabel(dec_frame2, text="Text Hidden In Image", font=("Arial", 16))
             text_label.pack()
-            text_area = ctk.CTkTextbox(dec_frame2, font=("Arial", 16), width=50, height=5)
-            text_area.configure(state="DISABLED")
+            text_area = ctk.CTkTextbox(dec_frame2, font=("Arial", 16), width=250, height=75, border_color="grey", border_width=1)
+            text_area.configure(state="disabled")
             text_area.pack()
             decode_button = ctk.CTkButton(dec_frame2, text="Decode", font=("Arial", 16), command=lambda: self.decode_txt(myfile, text_area))
             decode_button.pack()
@@ -265,9 +265,11 @@ class Steganography:
             main_menu_button.pack()
             self.update_window_size()
 
-    def encode_txt(self,image,data,text_area,frame):
-        text_area.delete("1.0", "END")
-        img = cv2.imread(image)
+    def encode_txt(self,image,text_area,frame):
+        data = text_area.get("1.0","end-1c")
+        text_area.delete("1.0", "end-1c")
+        # img = cv2.imread(image)
+        img = Image.open(image,"r")
         width, height, _ = img.shape
         img_arr = np.array(list(img.getdata()))
 
@@ -304,7 +306,8 @@ class Steganography:
             self.home(frame)
     
     def decode_txt(self,image,text_area):
-        img = cv2.imread(image)
+        # img = cv2.imread(image)
+        img = Image.open(image,"r")
         img_arr = np.array(list(img.getdata()))
         if img.mode == "p":
             messagebox.showerror("Error", "Image mode is not supported")
@@ -316,18 +319,18 @@ class Steganography:
         bits = ''.join(bits)
         bytes = [bits[i:i+8] for i in range(0, len(bits), 8)]
         secret_data = [chr(int(byte, 2)) for byte in bytes]
-        stop_indicator = "$$"
+        stop_indicator = "$$$"
 
         if stop_indicator in secret_data:
-            text_area.configure(state="NORMAL")
-            text_area.delete("1.0", "END")
+            text_area.configure(state="normal")
+            text_area.delete("1.0", "end-1c")
             text_area.insert("END", secret_data[:secret_data.index(stop_indicator)])
             messagebox.showinfo("Success", "Text extracted successfully")
         else:
             messagebox.showerror("Error", "Couldn't find secret message")
 
-        text_area.configure(state="DISABLED")
-    
+        text_area.configure(state="disabled")
+
     def encode_img(self,image1,image2,frame):
         img1 = cv2.imread(image1) 
         img2 = cv2.imread(image2) 
