@@ -1,6 +1,5 @@
-import tkinter
 from tkinter import messagebox, filedialog
-from customtkinter import *
+import customtkinter as ctk
 from PIL import Image
 import cv2
 import numpy as np
@@ -11,8 +10,10 @@ class Steganography:
         pass
 
     def home(self,frame):
-            frame.destroy()
-            self.main(root)
+            if frame.winfo_exists(): 
+                frame.pack_forget()
+                frame.destroy()
+                self.main(root)
 
     def update_window_size(self):
         """Update root window size based on current frame content"""
@@ -24,23 +25,20 @@ class Steganography:
     def main(self,root):
         root.title("Steganography")
         root.geometry("800x600")
-
-        # root.resizable(False, False)
         root.configure(bg="#f0f0f0" )
-
-        # Create a frame
-        
         root.grid_rowconfigure(1, weight=1)
         root.grid_columnconfigure(0, weight=1)
 
-        menu_frame = CTkFrame(root)
+        ctk.set_appearance_mode("light")
+
+        menu_frame = ctk.CTkFrame(root, fg_color="white")
         menu_frame.pack(anchor="center", padx=15, pady=15)
         menu_frame.pack_propagate(True)
 
-        img_in_img_button = CTkButton(menu_frame, text="Image in Image", font=("Arial", 16), command=lambda: self.img_menu(menu_frame))
+        img_in_img_button = ctk.CTkButton(menu_frame, text="Image in Image", font=("Arial", 16), command=lambda: self.img_menu(menu_frame))
         img_in_img_button.pack(anchor="center", pady=2)
 
-        txt_in_img_button = CTkButton(menu_frame, text="Text in Image", font=("Arial", 16), command=lambda: self.txt_menu(menu_frame))
+        txt_in_img_button = ctk.CTkButton(menu_frame, text="Text in Image", font=("Arial", 16), command=lambda: self.txt_menu(menu_frame))
         txt_in_img_button.pack(anchor="center", pady=2)
 
         self.update_window_size()
@@ -49,243 +47,286 @@ class Steganography:
 
     def img_menu(self,frame):
         frame.destroy()
-        img_menu_frame = CTkFrame(root)
-        img_menu_frame.pack(padx=15, pady=15)
+        img_menu_frame = ctk.CTkFrame(root, fg_color="white")
+        img_menu_frame.pack(padx=15, pady=15,fill="both", expand=True)
         img_menu_frame.pack_propagate(True)
-        encode_button = CTkButton(img_menu_frame, text="Encode", font=("Arial", 16), command=lambda: self.encode_frame1_img(img_menu_frame))
+        encode_button = ctk.CTkButton(img_menu_frame, text="Encode", font=("Arial", 16), command=lambda: self.encode_frame1_img(img_menu_frame))
         encode_button.pack()
-        decode_button = CTkButton(img_menu_frame, text="Decode", font=("Arial", 16), command=lambda: self.decode_frame1_img(img_menu_frame))
+        decode_button = ctk.CTkButton(img_menu_frame, text="Decode", font=("Arial", 16), command=lambda: self.decode_frame1_img(img_menu_frame))
         decode_button.pack()
-        main_menu_button = CTkButton(img_menu_frame, text="Main Menu", font=("Arial", 16), command=lambda: self.home(img_menu_frame))
+        main_menu_button = ctk.CTkButton(img_menu_frame, text="Main Menu", font=("Arial", 16), command=lambda: self.home(img_menu_frame))
         main_menu_button.pack()
         self.update_window_size()
 
     def txt_menu(self,frame):
         frame.destroy()
-        txt_menu_frame = CTkFrame(root)
-        txt_menu_frame.pack(padx=15, pady=15)
+        txt_menu_frame = ctk.CTkFrame(root, fg_color="white")
+        txt_menu_frame.pack(padx=15, pady=15,fill="both", expand=True)
         txt_menu_frame.pack_propagate(True)
-        encode_button = CTkButton(txt_menu_frame, text="Encode", font=("Arial", 16), command=lambda: self.encode_frame1_txt(txt_menu_frame))
+        encode_button = ctk.CTkButton(txt_menu_frame, text="Encode", font=("Arial", 16), command=lambda: self.encode_frame1_txt(txt_menu_frame))
         encode_button.pack()
-        decode_button = CTkButton(txt_menu_frame, text="Decode", font=("Arial", 16), command=lambda: self.decode_frame1_txt(txt_menu_frame))
+        decode_button = ctk.CTkButton(txt_menu_frame, text="Decode", font=("Arial", 16), command=lambda: self.decode_frame1_txt(txt_menu_frame))
         decode_button.pack()
-        main_menu_button = CTkButton(txt_menu_frame, text="Main Menu", font=("Arial", 16), command=lambda: self.home(txt_menu_frame))
+        main_menu_button = ctk.CTkButton(txt_menu_frame, text="Main Menu", font=("Arial", 16), command=lambda: self.home(txt_menu_frame))
         main_menu_button.pack()
         self.update_window_size()
         
     def encode_frame1_img(self,frame):
         frame.destroy()
-        enc_frame1 = CTkFrame(root)
-        enc_frame1.pack(padx=15, pady=15)
+        enc_frame1 = ctk.CTkFrame(root, fg_color="white")
+        enc_frame1.pack(padx=15, pady=15,fill="both", expand=True)
         enc_frame1.pack_propagate(True)
-        enc_label1 = CTkLabel(enc_frame1, text="Select an image to hide another image", font=("Arial", 16))
+        enc_label1 = ctk.CTkLabel(enc_frame1, text="Select an image to hide another image", font=("Arial", 16))
         enc_label1.pack()
-        select_button = CTkButton(enc_frame1, text="Select Image-1", font=("Arial", 16), command=lambda: self.encode_frame2_img(enc_frame1))
+        select_button = ctk.CTkButton(enc_frame1, text="Select Image-1", font=("Arial", 16), command=lambda: self.encode_frame2_img(enc_frame1))
         select_button.pack()
-        main_menu_button = CTkButton(enc_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame1))
+        main_menu_button = ctk.CTkButton(enc_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame1))
         main_menu_button.pack()
-        note_label = CTkLabel(enc_frame1, font=("Arial", 12), fg_color="red",
+        note_label = ctk.CTkLabel(enc_frame1, font=("Arial", 12), fg_color="white", text_color="red",
                         text="Note: It is recommended to use images of same dimensions...\n      Otherwise --> Image-1 should be same or larger than Image-2 in dimensions")
         note_label.pack()
         self.update_window_size()
 
     def encode_frame2_img(self,frame):
-        enc_frame2 = CTkFrame(root)
+        enc_frame2 = ctk.CTkFrame(root, fg_color="white")
         myfile1 = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile1:
             messagebox.showerror("Error", "No file selected")
         else:
+            enc_frame2.pack(padx=15, pady=15,fill="both", expand=True)
+            enc_frame2.pack_propagate(True)
+            frame.destroy()
             myimage = cv2.imread(myfile1)
             my_image = cv2.resize(myimage, (300, 300))
             image_rgb = cv2.cvtColor(my_image, cv2.COLOR_BGR2RGB)
-            image1 = CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb))
-            image_label = CTkLabel(enc_frame2, image=image1)
+            image1 = ctk.CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb),size=(300,300))
+            image_label = ctk.CTkButton(enc_frame2, image=image1, state="disabled", fg_color="white", text="")
             image_label.image = image1
             image_label.pack()
-            label1 = CTkLabel(enc_frame2, text="Selected Image ( In Which Image To Be Hidden!! )", font=("Arial", 16))
+            label1 = ctk.CTkLabel(enc_frame2, text="Selected Image ( In Which Image To Be Hidden!! )", font=("Arial", 16))
             label1.pack()
-            select_button = CTkButton(enc_frame2, text="Select Image-2", font=("Arial", 16), command=lambda: self.encode_frame3_img( enc_frame2, image1, myfile1))
+            select_button = ctk.CTkButton(enc_frame2, text="Select Image-2", font=("Arial", 16), command=lambda: self.encode_frame3_img( enc_frame2, image1, myfile1))
             select_button.pack()
-            main_menu_button = CTkButton(enc_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame2))
+            main_menu_button = ctk.CTkButton(enc_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame2))
             main_menu_button.pack()
-            enc_frame2.pack(padx=15, pady=15)
-            enc_frame2.pack_propagate(True)
-            frame.destroy()
             self.update_window_size()
 
     def encode_frame3_img(self,frame,image1,myfile1):
-            enc_frame3 = CTkFrame(root)
+            enc_frame3 = ctk.CTkScrollableFrame(root, width= 350, height= 350, fg_color="white", orientation="vertical")
             myfile2 = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
             if not myfile2:
                 messagebox.showerror("Error", "No file selected")
             else:
+                enc_frame3.pack(padx=15, pady=15,fill="both", expand=True)
+                enc_frame3.pack_propagate(True)
+                frame.destroy()
                 myimage = cv2.imread(myfile2)
                 my_image = cv2.resize(myimage, (300, 300))
                 image_rgb = cv2.cvtColor(my_image, cv2.COLOR_BGR2RGB)
-                image2 = CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb))
-                image1_label = CTkLabel(enc_frame3, image=image1)
+                image2 = ctk.CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb),size=(300,300))
+                image1_label = ctk.CTkButton(enc_frame3, image=image1, text=" ", fg_color="white", state='disabled')
                 image1_label.image = image1
                 image1_label.pack()
-                label1 = CTkLabel(enc_frame3, text="main Image ( In Which Image To Be Hidden )", font=("Arial", 16))
+                label1 = ctk.CTkLabel(enc_frame3, text="main Image ( In Which Image To Be Hidden )", font=("Arial", 16))
                 label1.pack()
-                image2_label = CTkLabel(enc_frame3, image=image2)
+                image2_label = ctk.CTkButton(enc_frame3, image=image2, text=" ", fg_color="white", state="disabled")
                 image2_label.image = image2
                 image2_label.pack()
-                label2 = CTkLabel(enc_frame3, text="Secret Image ( Image To Be Hidden )", font=("Arial", 16))
+                label2 = ctk.CTkLabel(enc_frame3, text="Secret Image ( Image To Be Hidden )", font=("Arial", 16))
                 label2.pack()
-                encode_button = CTkButton(enc_frame3, text="Encode", font=("Arial", 16), command=lambda: self.encode_img(myfile1, myfile2, enc_frame3))
+                encode_button = ctk.CTkButton(enc_frame3, text="Encode", font=("Arial", 16), command=lambda: self.encode_img(myfile1, myfile2, enc_frame3))
                 encode_button.pack()
-                main_menu_button = CTkButton(enc_frame3, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame3))
+                main_menu_button = ctk.CTkButton(enc_frame3, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame3))
                 main_menu_button.pack()
-                enc_frame3.pack(padx=15, pady=15)
-                frame.destroy()
                 self.update_window_size()
 
     def decode_frame1_img(self,frame):
         frame.destroy()
-        dec_frame1 = CTkFrame(root)
-        dec_frame1.pack(padx=15, pady=15)
+        dec_frame1 = ctk.CTkFrame(root, fg_color="white")
+        dec_frame1.pack(padx=15, pady=15,fill="both", expand=True)
         dec_frame1.pack_propagate(True)
-        dec_label1 = CTkLabel(dec_frame1, text="Select the image with hidden image", font=("Arial", 16))
+        dec_label1 = ctk.CTkLabel(dec_frame1, text="Select the image with hidden image", font=("Arial", 16))
         dec_label1.pack()
-        select_button = CTkButton(dec_frame1, text="Select", font=("Arial", 16), command=lambda: self.decode_frame2_img(dec_frame1))
+        select_button = ctk.CTkButton(dec_frame1, text="Select", font=("Arial", 16), command=lambda: self.decode_frame2_img(dec_frame1))
         select_button.pack()
-        main_menu_button = CTkButton(dec_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame1))
+        main_menu_button = ctk.CTkButton(dec_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame1))
         main_menu_button.pack()
-        note_label = CTkLabel(dec_frame1, font=("Arial", 12), fg_color="red",
+        note_label = ctk.CTkLabel(dec_frame1, font=("Arial", 12), text_color="red", fg_color="white",
                         text="Note: Secret/Hidden Image will be the part which has \n      proper image in the Extracted Hidden Image.\n\n      It majorly depends on the dimensdions of the images used.")
         note_label.pack()
         self.update_window_size()
 
     def decode_frame2_img(self,frame):
-        dec_frame2 = CTkFrame(root)
-        dec_frame2.place(relx=0.5, rely=0.5, anchor= tkinter.CENTER)
+        dec_frame2 = ctk.CTkScrollableFrame(root, width= 350, height= 450, fg_color="white", orientation="vertical")
+        dec_frame2.pack(padx=15, pady=15, fill="both", expand=True)
         dec_frame2.pack_propagate(True)
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile:
             messagebox.showerror("Error", "No file selected")
         else:
+            frame.destroy()
+            dec_frame2.pack(padx=15, pady=15,fill="both", expand=True)
+            dec_frame2.pack_propagate(True)
             myimage = cv2.imread(myfile)
             my_image = cv2.resize(myimage, (300, 300))
             image_rgb = cv2.cvtColor(my_image, cv2.COLOR_BGR2RGB)
-            image = CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb))
-            image_label = CTkLabel(master= dec_frame2, image=image)
-            image_label.image = image
+            image = ctk.CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb),size=(300,300))
+            image_label = ctk.CTkButton(master= dec_frame2, image=image, state="disabled", fg_color="white", text = "")
             image_label.pack()
-            label1 = CTkLabel(master= dec_frame2, text="Selected Image", font=("Arial", 16))
+            label1 = ctk.CTkLabel(master= dec_frame2, text="Selected Image", font=("Arial", 16))
             label1.pack()
-            hidden_image = None
-            hidden_image_label = CTkLabel(master= dec_frame2, image=hidden_image)
-            hidden_image_label.pack()
-            label2 = CTkLabel(master=dec_frame2, text="Hidden Image", font=("Arial", 16))
-            label2.pack()
-            label2.grid_forget()
-            decode_button = CTkButton(master= dec_frame2, text="Decode", state="normal", font=("Arial", 16), command=lambda: self.decode_img(myfile, image_label, hidden_image_label, decode_button, label2))
+            decode_button = ctk.CTkButton(master= dec_frame2, text="Decode", state="normal", font=("Arial", 16), command=lambda: self.decode_img(myfile, decode_button, label1, dec_frame2))
             decode_button.pack()
-            main_menu_button = CTkButton(master= dec_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame2))
+            main_menu_button = ctk.CTkButton(master= dec_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame2))
             main_menu_button.pack()
-            frame.destroy()
             self.update_window_size()	
 
     def encode_frame1_txt(self,frame):
         frame.destroy()
-        enc_frame1 = CTkFrame(root)
-        enc_frame1.pack(padx=15, pady=15)
+        enc_frame1 = ctk.CTkFrame(root, fg_color="white")
+        enc_frame1.pack(padx=15, pady=15,fill="both", expand=True)
         enc_frame1.pack_propagate(True)
-        enc_label1 = CTkLabel(enc_frame1, text="Select an image to hide text", font=("Arial", 16))
+        enc_label1 = ctk.CTkLabel(enc_frame1, text="Select an image to hide text", font=("Arial", 16))
         enc_label1.pack()
-        select_button = CTkButton(enc_frame1, text="Select", font=("Arial", 16), command=lambda: self.encode_frame2_txt(enc_frame1))
+        select_button = ctk.CTkButton(enc_frame1, text="Select", font=("Arial", 16), command=lambda: self.encode_frame2_txt(enc_frame1))
         select_button.pack()
-        main_menu_button = CTkButton(enc_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame1))
+        main_menu_button = ctk.CTkButton(enc_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame1))
         main_menu_button.pack()
         self.update_window_size()
         
     def encode_frame2_txt(self,frame):
-        enc_frame2 = CTkFrame(root)
+        enc_frame2 = ctk.CTkFrame(root, fg_color="white")
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile:
             messagebox.showerror("Error", "No file selected")
         else:
+            enc_frame2.pack(padx=15, pady=15,fill="both", expand=True)
+            enc_frame2.pack_propagate(True)
+            frame.destroy()
             myimage = cv2.imread(myfile)
             my_image = cv2.resize(myimage, (300, 300))
             image_rgb = cv2.cvtColor(my_image, cv2.COLOR_BGR2RGB)
-            image = CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb))
-            label1 = CTkLabel(enc_frame2, text="Selected Image", font=("Arial", 16))
+            image = ctk.CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb),size=(300,300))
+            label1 = ctk.CTkLabel(enc_frame2, text="Selected Image", font=("Arial", 16))
             label1.pack()
-            image_label = CTkLabel(enc_frame2, image=image)
+            image_label = ctk.CTkButton(enc_frame2, image=image, text=" ", fg_color="white", state="disabled")
             image_label.image = image
             image_label.pack()
-            text_label = CTkLabel(enc_frame2, text="Enter text to hide", font=("Arial", 16))
+            text_label = ctk.CTkLabel(enc_frame2, text="Enter text to hide", font=("Arial", 16))
             text_label.pack()
-            text_area = CTkTextbox(enc_frame2, font=("Arial", 16), width=50, height=5)
+            text_area = ctk.CTkTextbox(enc_frame2, font=("Arial", 16), width=50, height=5)
             text_area.pack()
-            data = text_area.get("1.0", END)
-            encode_button = CTkButton(enc_frame2, text="Encode", font=("Arial", 16), command=lambda: self.encode_txt(myfile, data, text_area))
+            data = text_area.get("1.0", "END")
+            encode_button = ctk.CTkButton(enc_frame2, text="Encode", font=("Arial", 16), command=lambda: self.encode_txt(myfile, data, text_area, enc_frame2))
             encode_button.pack()
-            main_menu_button = CTkButton(enc_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame2))
+            main_menu_button = ctk.CTkButton(enc_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(enc_frame2))
             main_menu_button.pack()
-            enc_frame2.pack(padx=15, pady=15)
-            enc_frame2.pack_propagate(True)
-            frame.destroy()
             self.update_window_size()
 
     def decode_frame1_txt(self,frame):
         frame.destroy()
-        dec_frame1 = CTkFrame(root)
-        dec_frame1.pack(padx=15, pady=15)
+        dec_frame1 = ctk.CTkFrame(root, fg_color="white")
+        dec_frame1.pack(padx=15, pady=15,fill="both", expand=True)
         dec_frame1.pack_propagate(True)
-        dec_label1 = CTkLabel(dec_frame1, text="Select the image with hidden text", font=("Arial", 16))
+        dec_label1 = ctk.CTkLabel(dec_frame1, text="Select the image with hidden text", font=("Arial", 16))
         dec_label1.pack()
-        select_button = CTkButton(dec_frame1, text="Select", font=("Arial", 16), command=lambda: self.decode_frame2_txt(dec_frame1))
+        select_button = ctk.CTkButton(dec_frame1, text="Select", font=("Arial", 16), command=lambda: self.decode_frame2_txt(dec_frame1))
         select_button.pack()
-        main_menu_button = CTkButton(dec_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame1))
+        main_menu_button = ctk.CTkButton(dec_frame1, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame1))
         main_menu_button.pack()
         self.update_window_size()
 
     def decode_frame2_txt(self,frame):
-        dec_frame2 = CTkFrame(root)
+        dec_frame2 = ctk.CTkFrame(root, fg_color="white")
         myfile = filedialog.askopenfilename(filetypes = ([('png', '*.png'),('jpeg', '*.jpeg'),('jpg', '*.jpg'),('All Files', '*.*')]))
         if not myfile:
             messagebox.showerror("Error", "No file selected")
         else:
+            dec_frame2.pack(padx=15, pady=15,fill="both", expand=True)
+            dec_frame2.pack_propagate(True)
+            frame.destroy()
             myimage = cv2.imread(myfile)
             my_image = cv2.resize(myimage, (300, 300))
             image_rgb = cv2.cvtColor(my_image, cv2.COLOR_BGR2RGB)
-            image = CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb))
-            label1 = CTkLabel(dec_frame2, text="Selected Image", font=("Arial", 16))
+            image = ctk.CTkImage(light_image=Image.fromarray(image_rgb),dark_image=Image.fromarray(image_rgb),size=(300,300))
+            label1 = ctk.CTkLabel(dec_frame2, text="Selected Image", font=("Arial", 16))
             label1.pack()
-            image_label = CTkLabel(dec_frame2, image=image)
+            image_label = ctk.CTkButton(dec_frame2, image=image, text=" ", fg_color="white", state="disabled")
             image_label.image = image
             image_label.pack()
-            text_label = CTkLabel(dec_frame2, text="Text Hidden In Image", font=("Arial", 16))
+            text_label = ctk.CTkLabel(dec_frame2, text="Text Hidden In Image", font=("Arial", 16))
             text_label.pack()
-            hidden_text = "Chulbul Pandey"
-            # hidden_text = self.decode(myfile)
-            text_area = CTkTextbox(dec_frame2, font=("Arial", 16), width=50, height=5)
+            text_area = ctk.CTkTextbox(dec_frame2, font=("Arial", 16), width=50, height=5)
+            text_area.configure(state="DISABLED")
             text_area.pack()
-            text_area.insert(END, hidden_text)
-            text_area.configure(state=DISABLED)
-            decode_button = CTkButton(dec_frame2, text="Decode", font=("Arial", 16), command=lambda: self.decode_txt(myfile, text_area))
+            decode_button = ctk.CTkButton(dec_frame2, text="Decode", font=("Arial", 16), command=lambda: self.decode_txt(myfile, text_area))
             decode_button.pack()
-            main_menu_button = CTkButton(dec_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame2))
+            main_menu_button = ctk.CTkButton(dec_frame2, text="Main Menu", font=("Arial", 16), command=lambda: self.home(dec_frame2))
             main_menu_button.pack()
-            dec_frame2.pack(padx=15, pady=15)
-            dec_frame2.pack_propagate(True)
-            frame.destroy()
             self.update_window_size()
 
+    def encode_txt(self,image,data,text_area,frame):
+        text_area.delete("1.0", "END")
+        img = cv2.imread(image)
+        width, height, _ = img.shape
+        img_arr = np.array(list(img.getdata()))
+
+        if img.mode == "p":
+            messagebox.showerror("Error", "Image mode is not supported")
+            self.decode_frame1_txt(frame)
+
+        channels = 4 if img.mode == 'RGBA' else 3
+        pixels = img_arr.shape // channels
+        stop_indicator = "$$$"
+        stop_indicator_length = len(stop_indicator)
+        data += stop_indicator
+        byte_message = ''.join([format(ord(i), "08b") for i in data])
+        bits = len(byte_message)
+
+        if bits > pixels :
+            messagebox.showerror("Error", "Insufficient pixels, need larger image")
+            self.decode_frame1_txt(frame)
+        else:
+            index = 0
+            for i in range(pixels):
+                for j in range(3):
+                    if index < bits:
+                        img_arr[i][j] = int(bin(img_arr[i][j])[2:9] + byte_message[index], 2)
+                        index += 1  
+
+        img_arr = img_arr.reshape(width, height, channels)                  
+        save_path = filedialog.asksaveasfilename(filetypes = ([('png', '*.png')]),defaultextension=".png")
+        if save_path:
+            # cv2.imwrite(save_path, img_arr)
+            img = Image.fromarray(img_arr)
+            img.save(save_path)
+            messagebox.showinfo("Success", "Text hidden successfully")
+            self.home(frame)
+    
     def decode_txt(self,image,text_area):
-        hidden_text = "kundalhalli"
-        text_area.configure(state=NORMAL)
-        text_area.delete("1.0", END)
-        text_area.insert(END, hidden_text)
-        return hidden_text
+        img = cv2.imread(image)
+        img_arr = np.array(list(img.getdata()))
+        if img.mode == "p":
+            messagebox.showerror("Error", "Image mode is not supported")
+            exit()
 
-    def encode_txt(self,image,data,text_area):
-        text_area.delete("1.0", END)
-        messagebox.showinfo("Success", "Text hidden successfully")
+        channels = 4 if img.mode == 'RGBA' else 3
+        pixels = img_arr.shape // channels
+        bits = [bin(img_arr[i][j])[-1] for i in range(pixels) for j in range(3)]
+        bits = ''.join(bits)
+        bytes = [bits[i:i+8] for i in range(0, len(bits), 8)]
+        secret_data = [chr(int(byte, 2)) for byte in bytes]
+        stop_indicator = "$$"
 
-        # newimg.save(filedialog.asksaveasfilename(initialfile=temp,filetypes = ([('png', '*.png')]),defaultextension=".png"))
+        if stop_indicator in secret_data:
+            text_area.configure(state="NORMAL")
+            text_area.delete("1.0", "END")
+            text_area.insert("END", secret_data[:secret_data.index(stop_indicator)])
+            messagebox.showinfo("Success", "Text extracted successfully")
+        else:
+            messagebox.showerror("Error", "Couldn't find secret message")
+
+        text_area.configure(state="DISABLED")
     
     def encode_img(self,image1,image2,frame):
         img1 = cv2.imread(image1) 
@@ -310,7 +351,8 @@ class Steganography:
             cv2.imwrite(save_path, img1)
             self.home(frame)
 
-    def decode_img(self,image,image_label,hidden_image_label,decode_button,label2):
+    def decode_img(self,image,decode_button,label1,frame):
+        decode_button.configure(state="disabled")
         img = cv2.imread(image) 
         width = img.shape[0] 
         height = img.shape[1] 
@@ -357,22 +399,15 @@ class Steganography:
         save_path2 = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png"), ("All files", "*.*")])
         if save_path2:
             cv2.imwrite(save_path2, best_image)
-        image1_rgb = cv2.cvtColor(image1, cv2.COLOR_BGR2RGB)
         best_image_rgb = cv2.cvtColor(best_image, cv2.COLOR_BGR2RGB)
-        image1_pil = CTkImage(light_image=Image.fromarray(image1_rgb),dark_image=Image.fromarray(image1_rgb),size=(300,300))
-        best_image_pil = CTkImage(light_image=Image.fromarray(best_image_rgb),dark_image=Image.fromarray(best_image_rgb),size=(300,300)) 
-        image_label.configure(image=image1_pil)
-        hidden_image_label.configure(image=best_image_pil)
-        image_label.image = image1_pil
-        image_label.pack()
-        hidden_image_label.image = best_image_pil
-        hidden_image_label.pack()
-        label2.pack()
-        decode_button.configure(state="disabled")
-        self.update_window_size()
+        best_image_ = ctk.CTkImage(light_image=Image.fromarray(best_image_rgb),dark_image=Image.fromarray(best_image_rgb),size=(300,300))
+        hidden_image_label = ctk.CTkButton(master=frame, text="", state="disabled", fg_color="white", image=best_image_)
+        hidden_image_label.pack(after=label1)
+        label2 = ctk.CTkLabel(master= frame, text="Hidden Image", font=("Arial", 16))
+        label2.pack(after=hidden_image_label)
         messagebox.showinfo("Success", "Images extracted and saved successfully")
 
-root = CTk()
+root = ctk.CTk(fg_color="white")
 app = Steganography()
 app.main(root)
 
